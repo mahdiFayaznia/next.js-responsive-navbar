@@ -1,13 +1,20 @@
 import { ReactNode } from "react";
 
-export default function MarginWidthWrapper({
-  children,
-}: {
+interface Props {
   children: ReactNode;
-}) {
+  rtl?: boolean;
+}
+
+const MarginWidthWrapper = ({ children, rtl = false }: Props) => {
   return (
-    <div className="flex flex-col lg:ml-60 sm:border-r sm:border-slate-700 min-h-screen">
+    <div
+      className={`${
+        rtl ? "lg:mr-60" : "lg:ml-60"
+      } flex flex-col sm:border-r sm:border-slate-700 min-h-screen`}
+    >
       {children}
     </div>
   );
-}
+};
+
+export default MarginWidthWrapper;

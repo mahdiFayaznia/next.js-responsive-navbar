@@ -1,9 +1,21 @@
 import { ReactNode } from "react";
 
-export default function PageWrapper({ children }: { children: ReactNode }) {
+interface Props {
+  children: ReactNode;
+  rtl?: boolean;
+}
+
+const PageWrapper = ({ children, rtl = false }: Props) => {
+  const directionStyle = rtl ? "rtl" : "ltr";
+
   return (
-    <div className="flex flex-col p-2 space-y-2 bg-slate-100 flex-grow">
+    <div
+      style={{ direction: directionStyle }}
+      className="flex flex-col p-2 space-y-2 bg-slate-100 flex-grow"
+    >
       {children}
     </div>
   );
-}
+};
+
+export default PageWrapper;

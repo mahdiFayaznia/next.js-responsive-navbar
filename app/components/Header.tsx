@@ -6,9 +6,14 @@ import { useSelectedLayoutSegment } from "next/navigation";
 import useScroll from "../hooks/useScroll";
 import { cn } from "../lib/utils";
 
-const Header = () => {
+interface Props {
+  rtl?: boolean;
+}
+
+const Header = ({ rtl = false }: Props) => {
   const scrolled = useScroll(5);
   const selectedLayout = useSelectedLayoutSegment();
+  const directionStyle = rtl ? "ltr" : "rtl";
 
   return (
     <div
@@ -21,18 +26,21 @@ const Header = () => {
       )}
     >
       <div className="flex h-[47px] items-center justify-between px-4">
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           <Link
             href="/"
-            className="flex flex-row space-x-3 items-center justify-center lg:hidden"
+            className="flex flex-row items-center justify-center lg:hidden"
           >
-            <span className="h-7 w-7 bg-slate-300 rounded-lg text-slate-700" />
-            <span className="font-bold text-xl flex ">Logo</span>
+            <span className="h-7 w-7 mr-3 bg-slate-300 rounded-lg text-slate-700" />
+            <span className="font-bold text-xl flex">Logo</span>
           </Link>
         </div>
 
-        <div className="hidden lg:block">
-          <div className="h-8 w-8 rounded-full bg-slate-300 flex items-center justify-center text-center text-slate-700">
+        <div
+          style={{ direction: directionStyle }}
+          className="hidden lg:block w-full"
+        >
+          <div className="h-7 w-7 rounded-full bg-slate-300 flex items-center justify-center text-center text-slate-700">
             <span className="font-semibold text-sm">HQ</span>
           </div>
         </div>

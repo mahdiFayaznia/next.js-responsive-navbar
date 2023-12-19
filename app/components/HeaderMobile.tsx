@@ -8,9 +8,14 @@ import { NavBarItem } from "../types";
 import { motion, useCycle } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 
+interface Props {
+  rtl?: boolean;
+}
+
 export type MenuItemWithSubMenuProps = {
   item: NavBarItem;
   toggleOpen: () => void;
+  direction: boolean;
 };
 
 const sidebar = {
@@ -89,14 +94,17 @@ const MenuItem = ({
 const MenuItemWithSubMenu: React.FC<MenuItemWithSubMenuProps> = ({
   item,
   toggleOpen,
+  direction,
 }) => {
   const pathname = usePathname();
   const [subMenuOpen, setSubMenuOpen] = useState(false);
+  const directionStyle = direction ? "rtl" : "ltr";
 
   return (
     <div className="text-slate-700">
       <MenuItem>
         <button
+          style={{ direction: directionStyle }}
           className="flex w-full text-xl"
           onClick={() => setSubMenuOpen(!subMenuOpen)}
         >
@@ -112,7 +120,12 @@ const MenuItemWithSubMenu: React.FC<MenuItemWithSubMenuProps> = ({
           </div>
         </button>
       </MenuItem>
-      <div className="mt-2 ml-2 flex flex-col space-y-2">
+      <div
+        style={{ direction: directionStyle }}
+        className={`${
+          direction ? "mr-4" : "ml-4"
+        } mt-2  flex flex-col space-y-2`}
+      >
         {subMenuOpen && (
           <>
             {item.subMenuItems?.map((subItem, subIndex) => {
@@ -178,11 +191,12 @@ const useDimensions = (ref: any) => {
   return dimensions.current;
 };
 
-const HeaderMobile = () => {
+const HeaderMobile = ({ rtl = false }: Props) => {
   const pathname = usePathname();
   const containerRef = useRef(null);
   const { height } = useDimensions(containerRef);
   const [isOpen, toggleOpen] = useCycle(false, true);
+  const directionStyle = rtl ? "rtl" : "ltr";
 
   return (
     <motion.nav
@@ -208,12 +222,17 @@ const HeaderMobile = () => {
           return (
             <div key={index}>
               {item.submenu ? (
-                <MenuItemWithSubMenu item={item} toggleOpen={toggleOpen} />
+                <MenuItemWithSubMenu
+                  item={item}
+                  toggleOpen={toggleOpen}
+                  direction={rtl}
+                />
               ) : (
                 <MenuItem>
                   <Link
                     href={item.path}
                     onClick={() => toggleOpen()}
+                    style={{ direction: directionStyle }}
                     className={`flex w-full text-2xl ${
                       item.path === pathname ? "font-bold" : ""
                     }`}
